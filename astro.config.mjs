@@ -12,7 +12,9 @@ export default defineConfig({
   site: SITE,
   // Static by default; dynamic routes opt in with `export const prerender = false`.
   output: 'static',
-  adapter: cloudflare(),
+  // passthrough image service: no Cloudflare Images (IMAGES) binding required,
+  // so a standard "Edit Workers" API token can deploy in CI.
+  adapter: cloudflare({ imageService: 'passthrough' }),
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],
