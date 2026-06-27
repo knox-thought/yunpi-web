@@ -1,0 +1,136 @@
+---
+import "../styles/global.css";
+import { site } from "../data/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Extra JSON-LD objects to inject (e.g. FAQPage, BreadcrumbList) */
+  jsonLd?: object[];
+  /** Set true on the tracking page etc. to keep it out of the index */
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = site.description,
+  jsonLd = [],
+  noindex = false,
+} = Astro.props;
+
+const pageTitle = title ? `${title} | ${site.name}` : `${site.name} — ${site.tagline}`;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogImage = new URL("/og.png", site.url).href;
+
+// AEO core: Organization + Service, present on every page for a consistent identity.
+const organization = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: site.name,
+  url: site.url,
+  logo: new URL("/logo.png", site.url).href,
+  description: site.description,
+  telephone: site.phoneE164,
+  areaServed: site.areaServed,
+  sameAs: [site.lineUrl],
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: site.phoneE164,
+    contactType: "customer service",
+    availableLanguage: ["th"],
+  },
+};
+
+const service = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "บริการสั่งซื้อ หิ้ว และขนส่งสินค้าจากญี่ปุ่นมาไทย",
+  provider: { "@type": "Organization", name: site.name, url: site.url },
+  areaServed: site.areaServed,
+  url: site.url,
+};
+---
+
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="th" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={site.locale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- JSON-LD: Organization + Service (always) + page-specific -->
+    <script type="application/ld+json" set:html={JSON.stringify(organization)} />
+    <script type="application/ld+json" set:html={JSON.stringify(service)} />
+    {jsonLd.map((obj) => (
+      <script type="application/ld+json" set:html={JSON.stringify(obj)} />
+    ))}
+  </head>
+  <body class="bg-ink text-white antialiased">
+    <header class="sticky top-0 z-30 border-b border-white/10 bg-ink/70 backdrop-blur">
+      <nav class="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
+        <a href="/" class="flex items-center gap-2">
+          <img src="/icon-t.png" alt="YUNPI" width="38" height="30" />
+          <span class="text-xl font-extrabold tracking-wide">YUNPI</span>
+        </a>
+        <div class="flex items-center gap-6 text-sm font-semibold text-white/80">
+          <a href="/track" class="hover:text-white">เช็คพัสดุ</a>
+          <a href="/faq" class="hover:text-white">คำถามที่พบบ่อย</a>
+          <a
+            href={site.lineUrl}
+            class="rounded-lg bg-line px-4 py-2 font-bold text-white"
+            >แอดไลน์</a
+          >
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="mt-20 border-t border-white/10 bg-ink-soft text-white/70">
+      <div class="mx-auto grid max-w-5xl gap-6 px-5 py-10 sm:grid-cols-3">
+        <div>
+          <div class="text-lg font-extrabold text-white">YUNPI</div>
+          <p class="mt-2 text-sm">{site.tagline}</p>
+        </div>
+        <div class="text-sm">
+          <div class="font-bold text-white">เมนู</div>
+          <ul class="mt-2 space-y-1">
+            <li><a href="/" class="hover:text-white">หน้าแรก</a></li>
+            <li><a href="/track" class="hover:text-white">เช็คพัสดุ</a></li>
+            <li><a href="/faq" class="hover:text-white">คำถามที่พบบ่อย</a></li>
+          </ul>
+        </div>
+        <div class="text-sm">
+          <div class="font-bold text-white">ติดต่อ</div>
+          <ul class="mt-2 space-y-1">
+            <li>โทร: <a href={`tel:${site.phoneE164}`} class="hover:text-white">{site.phone}</a></li>
+            <li><a href={site.lineUrl} class="font-semibold text-line">แอดไลน์ YUNPI</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-white/10 py-4 text-center text-xs text-white/50">
+        © {new Date().getFullYear()} {site.name} · รับหิ้วของจากญี่ปุ่น
+      </div>
+    </footer>
+  </body>
+</html>

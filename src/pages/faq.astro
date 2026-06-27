@@ -1,0 +1,40 @@
+---
+import Base from "../layouts/Base.astro";
+import { faqs, site } from "../data/site";
+
+const title = "คำถามที่พบบ่อย";
+
+// FAQPage structured data — drives rich results + AEO answers.
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<Base title={title} description="คำถามที่พบบ่อยเกี่ยวกับบริการหิ้วของและขนส่งสินค้าจากญี่ปุ่นมาไทยกับ YUNPI" jsonLd={[faqJsonLd]}>
+  <section class="mx-auto max-w-3xl px-5 py-14">
+    <h1 class="text-3xl font-extrabold sm:text-4xl">คำถามที่พบบ่อย</h1>
+    <p class="mt-2 text-white/60">เรื่องที่ลูกค้าถามบ่อยเกี่ยวกับการหิ้วของจากญี่ปุ่น</p>
+
+    <div class="mt-8 space-y-3">
+      {faqs.map((f) => (
+        <details class="reveal rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+          <summary class="cursor-pointer text-lg font-bold">{f.q}</summary>
+          <p class="mt-2 text-white/70">{f.a}</p>
+        </details>
+      ))}
+    </div>
+
+    <div class="mt-10 rounded-2xl bg-brand p-7 text-center text-white">
+      <p class="text-lg font-bold">ยังมีคำถามอื่น?</p>
+      <a href={site.lineUrl} class="mt-4 inline-block rounded-xl bg-white px-7 py-3 font-bold text-brand">
+        ทักไลน์ถามได้เลย
+      </a>
+    </div>
+  </section>
+</Base>

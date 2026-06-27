@@ -1,0 +1,148 @@
+---
+import Base from "../layouts/Base.astro";
+import { site, steps, faqs } from "../data/site";
+
+const title = "รับหิ้วของจากญี่ปุ่น พรีออเดอร์ ส่งไทย";
+---
+
+<Base title={title}>
+  <!-- ===== HERO ===== -->
+  <section class="relative overflow-hidden">
+    <!-- red glows -->
+    <div class="pointer-events-none absolute -right-40 -top-60 h-[640px] w-[640px] rounded-full"
+      style="background:radial-gradient(circle,rgba(229,50,45,.38),transparent 60%)"></div>
+    <div class="pointer-events-none absolute -left-40 top-40 h-[460px] w-[460px] rounded-full"
+      style="background:radial-gradient(circle,rgba(229,50,45,.14),transparent 60%)"></div>
+
+    <div class="relative mx-auto grid max-w-6xl items-center gap-10 px-5 py-16 sm:grid-cols-2 sm:py-24">
+      <div>
+        <span class="inline-block rounded-full border border-white/20 px-4 py-2 text-sm font-semibold text-white/90">
+          {site.tagline}
+        </span>
+        <h1 class="mt-6 text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
+          หิ้วของ<span class="text-brand-light">ญี่ปุ่น</span><br />ส่งถึงไทย
+        </h1>
+        <p class="mt-5 max-w-md text-lg text-white/70">
+          สั่งซื้อ ประมูล และขนส่งครบวงจร เรท {site.rates.fxNote} ติดตามสถานะได้ทุกขั้นตอน
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href={site.lineUrl} class="rounded-xl bg-line px-7 py-3.5 font-bold text-white shadow-lg shadow-line/20">
+            แอดไลน์สั่งเลย
+          </a>
+          <a href="#calc" class="rounded-xl border border-white/25 px-7 py-3.5 font-bold text-white hover:bg-white/5">
+            คำนวณค่าส่ง
+          </a>
+        </div>
+      </div>
+
+      <div class="flex justify-center">
+        <img src="/icon-t.png" alt="โลโก้ YUNPI" width="460" height="356"
+          class="float-slow w-[78%] max-w-md drop-shadow-2xl" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RATE CALCULATOR (interactive) ===== -->
+  <section id="calc" class="relative mx-auto -mt-6 max-w-6xl px-5">
+    <div class="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur sm:p-8">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-extrabold">คำนวณค่าส่งคร่าวๆ</h2>
+          <p class="text-sm text-white/60">ใส่น้ำหนักโดยประมาณ ดูค่าส่งเริ่มต้นทันที</p>
+        </div>
+        <label class="text-sm text-white/70">
+          น้ำหนัก (กก.)
+          <input id="w" type="number" min="0.5" step="0.5" value="2"
+            class="ml-2 w-24 rounded-lg border border-white/15 bg-ink px-3 py-2 text-white outline-none focus:border-brand-light" />
+        </label>
+      </div>
+
+      <div class="mt-6 grid gap-4 sm:grid-cols-2">
+        <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+          <div class="text-sm font-semibold text-white/70">✈️ ทางเครื่อง · {site.rates.air.eta}</div>
+          <div class="mt-1 text-4xl font-extrabold">฿<span id="air">760</span></div>
+          <div class="text-xs text-white/40">เริ่ม {site.rates.air.from} {site.rates.air.unit}</div>
+        </div>
+        <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+          <div class="text-sm font-semibold text-white/70">🚢 ทางเรือ · {site.rates.sea.eta}</div>
+          <div class="mt-1 text-4xl font-extrabold">฿<span id="sea">300</span></div>
+          <div class="text-xs text-white/40">เริ่ม {site.rates.sea.from} {site.rates.sea.unit}</div>
+        </div>
+      </div>
+      <p class="mt-3 text-xs text-white/40">*ประมาณการจากเรทเริ่มต้น · {site.rates.etaNote} · ราคาจริงแจ้งทางไลน์</p>
+    </div>
+  </section>
+
+  <!-- ===== 4 STEPS ===== -->
+  <section class="mx-auto max-w-6xl px-5 py-20">
+    <h2 class="reveal text-center text-3xl font-extrabold sm:text-4xl">หิ้วของญี่ปุ่น ง่ายใน 4 ขั้นตอน</h2>
+    <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {steps.map((s) => (
+        <div class="reveal rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+          <div class="flex h-11 w-11 items-center justify-center rounded-full bg-brand text-lg font-extrabold text-white">
+            {s.n}
+          </div>
+          <h3 class="mt-4 text-lg font-bold">{s.title}</h3>
+          <p class="mt-1 text-sm text-white/60">{s.desc}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ===== SOURCE SITES (marquee) ===== -->
+  <section class="border-y border-white/10 bg-white/[0.02] py-10">
+    <p class="mb-6 text-center text-sm font-bold uppercase tracking-widest text-white/40">สั่งได้จากทุกเว็บญี่ปุ่น</p>
+    <div class="relative overflow-hidden">
+      <div class="marquee-track flex w-max gap-12 whitespace-nowrap text-2xl font-extrabold text-white/70">
+        {[...site.sourceSites, ...site.sourceSites].map((name) => (
+          <span class="flex items-center gap-12">{name}<span class="text-brand-light">✦</span></span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="mx-auto max-w-3xl px-5 py-20">
+    <h2 class="reveal text-center text-3xl font-extrabold">คำถามที่พบบ่อย</h2>
+    <div class="mt-8 space-y-3">
+      {faqs.slice(0, 3).map((f) => (
+        <details class="reveal rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+          <summary class="cursor-pointer font-bold">{f.q}</summary>
+          <p class="mt-2 text-white/70">{f.a}</p>
+        </details>
+      ))}
+    </div>
+    <div class="mt-6 text-center">
+      <a href="/faq" class="font-bold text-brand-light underline">ดูคำถามทั้งหมด</a>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="relative overflow-hidden bg-brand py-16 text-center">
+    <div class="mx-auto max-w-3xl px-5">
+      <h2 class="text-3xl font-extrabold sm:text-4xl">พร้อมหิ้วของญี่ปุ่นให้คุณแล้ว</h2>
+      <p class="mt-3 text-white/90">แอดไลน์ ส่งลิงก์สินค้า แล้วรอรับของถึงบ้านได้เลย</p>
+      <div class="mt-7 flex flex-wrap justify-center gap-3">
+        <a href={site.lineUrl} class="rounded-xl bg-white px-8 py-3.5 font-bold text-brand">แอดไลน์ YUNPI</a>
+        <a href={`tel:${site.phoneE164}`} class="rounded-xl border border-white/40 px-8 py-3.5 font-bold text-white">
+          โทร {site.phone}
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const w = document.getElementById("w") as HTMLInputElement;
+  const air = document.getElementById("air")!;
+  const sea = document.getElementById("sea")!;
+  const AIR = 380, SEA = 150; // เริ่มต้น บาท/กก.
+  const fmt = (n: number) => n.toLocaleString("th-TH");
+  function update() {
+    const kg = Math.max(0, parseFloat(w.value) || 0);
+    air.textContent = fmt(Math.round(kg * AIR));
+    sea.textContent = fmt(Math.round(kg * SEA));
+  }
+  w.addEventListener("input", update);
+  update();
+</script>

@@ -1,0 +1,102 @@
+---
+import Base from "../layouts/Base.astro";
+import { site } from "../data/site";
+
+const title = "เช็คพัสดุ ติดตามสถานะสินค้าจากญี่ปุ่น";
+---
+
+<Base title={title} description="เช็คและติดตามสถานะพัสดุสินค้าจากญี่ปุ่นมาไทยกับ YUNPI กรอกรหัสพัสดุเพื่อดูสถานะทุกขั้นตอน">
+  <section class="mx-auto max-w-2xl px-5 py-14">
+    <h1 class="text-3xl font-extrabold sm:text-4xl">เช็คพัสดุ</h1>
+    <p class="mt-2 text-white/60">กรอกรหัสพัสดุ (เช่น YP100001) เพื่อดูสถานะการขนส่ง</p>
+
+    <form id="track-form" class="mt-6 flex gap-3">
+      <input
+        id="code"
+        name="code"
+        type="text"
+        required
+        autocomplete="off"
+        placeholder="รหัสพัสดุ เช่น YP100001"
+        class="flex-1 rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 text-white placeholder:text-white/40 outline-none focus:border-brand-light"
+      />
+      <button type="submit" class="rounded-xl bg-brand px-6 py-3 font-bold text-white">
+        เช็ค
+      </button>
+    </form>
+    <p class="mt-2 text-xs text-white/40">ตัวอย่างทดสอบ: YP100001, YP100002</p>
+
+    <div id="result" class="mt-8"></div>
+
+    <div class="mt-10 rounded-2xl border border-white/10 bg-white/[0.04] p-5 text-sm text-white/60">
+      หารหัสพัสดุไม่เจอ? <a href={site.lineUrl} class="font-bold text-line">ทักไลน์ YUNPI</a> เดี๋ยวทีมงานเช็คให้
+    </div>
+  </section>
+</Base>
+
+<script>
+  const form = document.getElementById("track-form") as HTMLFormElement;
+  const input = document.getElementById("code") as HTMLInputElement;
+  const result = document.getElementById("result") as HTMLElement;
+
+  const esc = (s: string) =>
+    s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
+
+  function render(data: any) {
+    const methodLabel = data.method === "air" ? "ทางเครื่อง" : data.method === "sea" ? "ทางเรือ" : "-";
+    const steps = data.timeline
+      .map((s: any) => `
+        <li class="flex gap-3">
+          <div class="flex flex-col items-center">
+            <span class="flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${
+              s.done ? "bg-brand text-white" : "bg-white/10 text-white/30"
+            }">${s.done ? "✓" : ""}</span>
+            <span class="w-px flex-1 bg-white/10"></span>
+          </div>
+          <div class="pb-5">
+            <div class="font-semibold ${s.done ? "" : "text-white/40"}">${esc(s.label)}</div>
+            ${s.date ? `<div class="text-xs text-white/40">${esc(s.date)}</div>` : ""}
+          </div>
+        </li>`)
+      .join("");
+
+    result.innerHTML = `
+      <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-sm text-white/50">รหัสพัสดุ</div>
+            <div class="text-xl font-extrabold">${esc(data.code)}</div>
+          </div>
+          <span class="rounded-full bg-brand/20 px-4 py-1.5 font-bold text-brand-light">${esc(data.statusLabel)}</span>
+        </div>
+        <div class="mt-1 text-sm text-white/50">ขนส่ง: ${methodLabel}</div>
+        <ol class="mt-5">${steps}</ol>
+      </div>`;
+  }
+
+  function renderError(msg: string) {
+    result.innerHTML = `<div class="rounded-2xl border border-brand/20 bg-brand/5 p-5 font-semibold text-brand">${esc(msg)}</div>`;
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const code = input.value.trim();
+    if (!code) return;
+    result.innerHTML = `<div class="p-5 text-white/40">กำลังเช็ค…</div>`;
+    try {
+      const res = await fetch(`/api/track?code=${encodeURIComponent(code)}`);
+      const data = await res.json();
+      if (!res.ok) return renderError(data.message || "เกิดข้อผิดพลาด");
+      render(data);
+    } catch {
+      renderError("เชื่อมต่อไม่ได้ ลองใหม่อีกครั้ง");
+    }
+  });
+
+  // Allow deep-link ?code=...
+  const initial = new URLSearchParams(location.search).get("code");
+  if (initial) {
+    input.value = initial;
+    form.requestSubmit();
+  }
+</script>

@@ -16,6 +16,12 @@ Thumbs.db
 .vscode/
 .idea/
 
+# local agent settings
+.claude/settings.local.json
+
 # logs
 *.log
 npm-debug.log*
+
+# cloudflare local
+.wrangler/
