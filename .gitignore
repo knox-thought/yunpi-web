@@ -1,0 +1,21 @@
+# deps
+node_modules/
+
+# build
+dist/
+.astro/
+
+# env / secrets
+.env
+.env.*
+!.env.example
+
+# os / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# logs
+*.log
+npm-debug.log*
