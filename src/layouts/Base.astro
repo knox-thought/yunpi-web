@@ -90,14 +90,23 @@ const service = {
           <img src="/icon-t.png" alt="YUNPI" width="38" height="30" />
           <span class="text-xl font-extrabold tracking-wide">YUNPI</span>
         </a>
-        <div class="flex items-center gap-6 text-sm font-semibold text-white/80">
+        <!-- desktop menu -->
+        <div class="hidden items-center gap-6 text-sm font-semibold text-white/80 sm:flex">
           <a href="/track" class="hover:text-white">เช็คพัสดุ</a>
           <a href="/faq" class="hover:text-white">คำถามที่พบบ่อย</a>
-          <a
-            href={site.lineUrl}
-            class="rounded-lg bg-line px-4 py-2 font-bold text-white"
-            >แอดไลน์</a
-          >
+          <a href={site.lineUrl} class="rounded-lg bg-line px-4 py-2 font-bold text-white">แอดไลน์</a>
+        </div>
+
+        <!-- mobile menu (pure CSS via <details>) -->
+        <div class="flex items-center gap-2.5 sm:hidden">
+          <a href={site.lineUrl} class="rounded-lg bg-line px-3.5 py-2 text-sm font-bold text-white">แอดไลน์</a>
+          <details class="group relative">
+            <summary class="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-lg border border-white/15 text-xl [&::-webkit-details-marker]:hidden">☰</summary>
+            <div class="absolute right-0 z-40 mt-2 w-48 rounded-xl border border-white/10 bg-ink-soft p-2 text-sm font-semibold shadow-2xl">
+              <a href="/track" class="block rounded-lg px-3 py-2 hover:bg-white/5">เช็คพัสดุ</a>
+              <a href="/faq" class="block rounded-lg px-3 py-2 hover:bg-white/5">คำถามที่พบบ่อย</a>
+            </div>
+          </details>
         </div>
       </nav>
     </header>
