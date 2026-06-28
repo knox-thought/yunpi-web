@@ -23,6 +23,15 @@ export const site = {
   },
 } as const;
 
+// Source-site logos for the marquee (white SVGs in /public/brands).
+// Mercari is a hand-made wordmark; the rest are Simple Icons brand marks.
+export const brands = [
+  { name: "Mercari", logo: "/brands/mercari.svg" },
+  { name: "Rakuten", logo: "/brands/rakuten.svg" },
+  { name: "Yahoo!", logo: "/brands/yahoo.svg" },
+  { name: "Amazon", logo: "/brands/amazon.svg" },
+] as const;
+
 // 4-step "how it works"
 export const steps = [
   { n: 1, title: "ส่งลิงก์สินค้า", desc: "ส่งลิงก์ของที่อยากได้จากเว็บญี่ปุ่นมาทางไลน์" },
