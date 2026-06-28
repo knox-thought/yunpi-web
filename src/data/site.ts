@@ -9,8 +9,8 @@ export const site = {
     "YUNPI บริการสั่งซื้อ หิ้ว และขนส่งสินค้าจากญี่ปุ่นมาไทยครบวงจร เรท Superrich +0.03 ส่งทางเครื่องและทางเรือ เช็คสถานะพัสดุได้ทุกขั้นตอน",
   url: "https://yunpi.com",
   locale: "th_TH",
-  phone: "093-692-6259",
-  phoneE164: "+66936926259",
+  phone: "064-193-2656",
+  phoneE164: "+66641932656",
   lineUrl: "https://lin.ee/UqE1ayL",
   areaServed: ["ญี่ปุ่น", "ไทย"],
   // Source sites we buy from
