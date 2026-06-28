@@ -46,6 +46,10 @@ body {
 .marquee-track {
   animation: marquee 24s linear infinite;
 }
+/* pause so users can click a logo */
+.marquee-track:hover {
+  animation-play-state: paused;
+}
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; }
 }
