@@ -33,23 +33,23 @@ type TrackResult = {
 const STEP_DEFS = [
   { key: "ordered", label: "รับออเดอร์" },
   { key: "purchased", label: "สั่งซื้อ/ประมูลแล้ว" },
-  { key: "warehouse_jp", label: "ถึงโกดังญี่ปุ่น" },
   { key: "shipped", label: "ส่งออกจากญี่ปุ่น" },
-  { key: "arrived_th", label: "ถึงไทย / เคลียร์ภาษี" },
+  { key: "arrived_th", label: "ถึงไทย · เคลียร์ภาษี" },
+  { key: "consolidated", label: "รวมพัสดุที่โกดังไทย" },
   { key: "delivered", label: "ส่งถึงมือลูกค้า" },
 ] as const;
 
 // Demo data so the flow works end-to-end before the ops API exists.
 const DEMO: Record<string, { reached: number; method: "air" | "sea"; dates: string[] }> = {
   YP100001: {
-    reached: 3, // shipped
+    reached: 2, // shipped out of Japan, in transit
     method: "air",
-    dates: ["2026-06-20", "2026-06-21", "2026-06-24", "2026-06-26", "", ""],
+    dates: ["2026-06-20", "2026-06-21", "2026-06-24", "", "", ""],
   },
   YP100002: {
     reached: 5, // delivered
     method: "sea",
-    dates: ["2026-05-10", "2026-05-12", "2026-05-18", "2026-05-20", "2026-06-08", "2026-06-12"],
+    dates: ["2026-05-10", "2026-05-12", "2026-05-18", "2026-05-28", "2026-06-08", "2026-06-12"],
   },
 };
 
